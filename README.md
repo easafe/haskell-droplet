@@ -1,2 +1,2 @@
-# haskell-pebble
+# haskell-droplet
 Run purescript-droplet migrations
