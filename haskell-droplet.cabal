@@ -6,13 +6,13 @@ cabal-version: 1.12
 
 name:           haskell-droplet
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/haskell-droplet#readme>
-homepage:       https://github.com/githubuser/haskell-droplet#readme
-bug-reports:    https://github.com/githubuser/haskell-droplet/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
-license:        BSD3
+description:    Please see the README on GitHub at <https://github.com/easafe/haskell-droplet#readme>
+homepage:       https://github.com/easafe/haskell-droplet#readme
+bug-reports:    https://github.com/easafe/haskell-droplet/issues
+author:         Eduardo Asafe
+maintainer:     e@asafe.dev
+copyright:      2021 Eduardo Asafe
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
@@ -21,22 +21,27 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/haskell-droplet
+  location: https://github.com/easafe/haskell-droplet
 
 library
   exposed-modules:
-      Lib
+      Constants
+      Droplet
   other-modules:
       Paths_haskell_droplet
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , load-env
+    , optparse-applicative
+    , text
   default-language: Haskell2010
 
 executable haskell-droplet-exe
   main-is: Main.hs
   other-modules:
+      Command
       Paths_haskell_droplet
   hs-source-dirs:
       app
@@ -44,6 +49,9 @@ executable haskell-droplet-exe
   build-depends:
       base >=4.7 && <5
     , haskell-droplet
+    , load-env
+    , optparse-applicative
+    , text
   default-language: Haskell2010
 
 test-suite haskell-droplet-test
@@ -57,4 +65,7 @@ test-suite haskell-droplet-test
   build-depends:
       base >=4.7 && <5
     , haskell-droplet
+    , load-env
+    , optparse-applicative
+    , text
   default-language: Haskell2010
