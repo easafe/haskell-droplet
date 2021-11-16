@@ -1,6 +1,6 @@
-name:                haskell-droplet
+name:                haskell-pebble
 version:             0.1.0.0
-github:              "easafe/haskell-droplet"
+github:              "easafe/haskell-pebble"
 license:             MIT
 author:              "Eduardo Asafe"
 maintainer:          "e@asafe.dev"
@@ -17,31 +17,26 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/easafe/haskell-droplet#readme>
+description:         Please see the README on GitHub at <https://github.com/easafe/haskell-pebble#readme>
 
 dependencies:
 - base >= 4.7 && < 5
 - text
 - optparse-applicative
 - load-env
-
-
-library:
-  source-dirs: src
+- postgresql-simple
 
 executables:
-  haskell-droplet-exe:
+  haskell-pebble-exe:
     main:                Main.hs
-    source-dirs:         app
+    source-dirs:         src
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    dependencies:
-    - haskell-droplet
 
 tests:
-  haskell-droplet-test:
+  haskell-pebble-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -49,4 +44,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - haskell-droplet
+    - haskell-pebble-exe

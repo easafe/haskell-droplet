@@ -11,11 +11,14 @@ import Data.Char (isSpace)
 import qualified Data.Maybe as DM
 import qualified Data.Text as DT
 import qualified Data.Text.IO as DTI
-import Droplet (Commands (..), Options (..))
+import Command (Options (..))
 import qualified LoadEnv as LE
 import Options.Applicative (Parser, ParserInfo, (<**>))
 import qualified Options.Applicative as OA
 import qualified System.Environment as SE
+
+data Commands
+    = Define Options
 
 commandParser :: Parser Commands
 commandParser =
@@ -32,9 +35,16 @@ optionsParser :: Parser Options
 optionsParser =
     Options
         <$> OA.optional (OA.argument OA.str (OA.metavar "INPUT"))
+         <*> OA.optional
+            ( OA.strOption $
+                OA.long "schema"
+                    <> OA.short 's'
+                    <> OA.help "Database schema"
+                    <> OA.metavar "STRING"
+            )
         <*> OA.optional
             ( OA.strOption $
-                OA.long "connection"
+                OA.long "connection-url"
                     <> OA.short 'c'
                     <> OA.help "Database connection URL"
                     <> OA.metavar "STRING"
@@ -57,7 +67,8 @@ optionsParser =
 getEnvironment :: IO Options
 getEnvironment =
     Options Nothing
-        <$> SE.lookupEnv "connection"
+        <$> SE.lookupEnv "schema"
+        <*> SE.lookupEnv "connectionUrl"
         <*> SE.lookupEnv "definitionsFolder"
         <*> ((DT.pack <$>) <$> SE.lookupEnv "moduleBaseName")
 
@@ -80,15 +91,18 @@ main = do
             mangled <- validateOptions environment options
             C.define mangled
   where
+    --command line arguments take precedence over environment variables
+    -- only connectionUrl is mandatory
     validateOptions environment options = do
         let mangled =
                 Options
                     { input = input options
-                    , connection = connection options <|> connection environment
+                    , schema = schema options <|> schema environment
+                    , connectionUrl = connectionUrl options <|> connectionUrl environment
                     , definitionsFolder = definitionsFolder options <|> definitionsFolder environment <|> Just defaultDefinitionsFolder
                     , moduleBaseName = moduleBaseName options <|> moduleBaseName environment <|> Just defaultModuleBaseName
                     }
-        when (DM.isNothing (connection mangled) || (trim <$> connection mangled) == Just "") $ error missingConnectionError
+        when (DM.isNothing (connectionUrl mangled) || (trim <$> connectionUrl mangled) == Just "") $ error missingConnectionError
         pure mangled
 
     trim = let f = reverse . dropWhile isSpace in f . f
