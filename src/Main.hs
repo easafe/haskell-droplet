@@ -17,6 +17,9 @@ import Options.Applicative (Parser, ParserInfo, (<**>))
 import qualified Options.Applicative as OA
 import qualified System.Environment as SE
 
+-- | Commands available
+--
+-- This datatype is used only here, for parsing
 data Commands
     = Define Options
 

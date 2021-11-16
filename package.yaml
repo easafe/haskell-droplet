@@ -24,7 +24,10 @@ dependencies:
 - text
 - optparse-applicative
 - load-env
+- hashable
 - postgresql-simple
+- casing
+- unordered-containers
 
 executables:
   haskell-pebble-exe:
