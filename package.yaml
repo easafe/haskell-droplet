@@ -28,6 +28,7 @@ dependencies:
 - postgresql-simple
 - casing
 - unordered-containers
+- directory
 
 library:
   source-dirs: src

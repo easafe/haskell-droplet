@@ -26,8 +26,10 @@ source-repository head
 library
   exposed-modules:
       Command
+      Command.Define
+      Command.Internal.Query
+      Command.Types
       Constants
-      Query
   other-modules:
       Paths_haskell_pebble
   hs-source-dirs:
@@ -35,6 +37,7 @@ library
   build-depends:
       base >=4.7 && <5
     , casing
+    , directory
     , hashable
     , load-env
     , optparse-applicative
@@ -53,6 +56,7 @@ executable haskell-pebble-exe
   build-depends:
       base >=4.7 && <5
     , casing
+    , directory
     , hashable
     , haskell-pebble
     , load-env
@@ -73,6 +77,7 @@ test-suite haskell-pebble-test
   build-depends:
       base >=4.7 && <5
     , casing
+    , directory
     , hashable
     , haskell-pebble
     , hspec

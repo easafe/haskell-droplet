@@ -2,7 +2,7 @@ on:
   pull_request:
   push:
     branches: [main]
-    
+
 name: CI
 
 jobs:
@@ -12,8 +12,8 @@ jobs:
       matrix:
         ghc: ['8.10']
         cabal: [latest]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-    name: CI ${{ matrix.os }} 
+        os: [ubuntu-latest] #, macOS-latest, windows-latest]
+    name: CI ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Haskell
@@ -22,7 +22,7 @@ jobs:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
           enable-stack: true
-          stack-version: 'latest'      
+          stack-version: 'latest'
       - uses: actions/cache@v2.1.3
         name: Cache ~/.stack
         with:

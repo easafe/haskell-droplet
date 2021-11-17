@@ -15,17 +15,20 @@ missingConnectionError = "Database connection URL is required"
 defaultSchema :: String
 defaultSchema = "public"
 
-moduleWhere :: Text
-moduleWhere = "where\n\n"
+moduleKeyword :: Text
+moduleKeyword = "module "
+
+whereKeyword :: Text
+whereKeyword = " where\n\n"
 
 defaultImportList :: Text
-defaultImportList = "import Droplet.Language\nimport Type.Proxy (Proxy(..))\n\n"
+defaultImportList = "import Droplet.Language\nimport Type.Proxy (Proxy(..))\n"
 
 dateImport :: Text
-dateImport = "import Data.Date (Date)"
+dateImport = "import Data.Date (Date)\n"
 
 dateTimeImport :: Text
-dateTimeImport = "import Data.DateTime (DateTime)"
+dateTimeImport = "import Data.DateTime (DateTime)\n"
 
 newLine :: Text
 newLine = "\n"
@@ -95,3 +98,9 @@ dash = "_"
 
 proxyType :: Text
 proxyType = "Proxy "
+
+pureScriptExtension :: String
+pureScriptExtension = ".purs"
+
+slash :: String
+slash = "/"
