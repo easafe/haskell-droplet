@@ -20,7 +20,7 @@ defaultOptions =
     Options
         { input = Nothing
         , schema = Nothing
-        , connectionUrl = Just "postgres://pebble@localhost/pebble"
+        , connectionUrl = Just "postgres://pebble:pebble@localhost/pebble"
         , definitionsFolder = Just "test/Definition"
         , moduleBaseName = Just "Test"
         }
