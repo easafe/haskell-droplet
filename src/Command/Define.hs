@@ -36,8 +36,9 @@ import Constants (
     slash,
     stringType,
     tableType,
+    dot,
     typeKeyword,
-    whereKeyword,
+    whereKeyword, space
  )
 import qualified Data.Foldable as DF
 import Data.HashMap.Strict ((!))
@@ -55,6 +56,7 @@ import GHC.Generics (Generic)
 import qualified System.Directory as SD
 import qualified Text.Casing as TC
 import Prelude hiding (print)
+import Debug.Trace (traceShow)
 
 -- | A table marks the definition and the column row type
 data Table = Table
@@ -154,7 +156,7 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
         , contents = DT.intercalate newLine [header, rowType, table, proxies]
         }
     where
-        header = disclaimer <> moduleKeyword <> moduleBaseName <> titleName <> whereKeyword <> defaultImportList <> extraImports
+        header = disclaimer <> moduleKeyword <> moduleBaseName <> dot <> titleName <> whereKeyword <> defaultImportList <> extraImports
 
         rowType =
             let fieldSeparator = newLine <> ident <> comma
@@ -171,6 +173,7 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
             camelCaseName <> doubleColon <> quote <> originalName <> quote <> newLine
                 <> camelCaseName
                 <> equals
+                <> space
                 <> tableType
                 <> newLine
 
@@ -203,13 +206,14 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
 
         toProxy Column{originalName, camelCaseName} =
             let name = dash <> camelCaseName
-             in name <> doubleColon <> proxyType <> quote <> originalName <> quote <> newLine
+             in name <> doubleColon <> proxyType <> space <> quote <> originalName <> quote <> newLine
                     <> name
                     <> equals
+                    <> space
                     <> proxyType
                     <> newLine
 
-        titleName = DT.toTitle camelCaseName
+        titleName = DT.pack . TC.pascal $ DT.unpack camelCaseName
 
 saveFile :: FilePath -> FileOutput -> IO ()
 saveFile folderName FileOutput{name, contents} = do

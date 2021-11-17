@@ -7,7 +7,10 @@ defaultDefinitionsFolder :: FilePath
 defaultDefinitionsFolder = "Definition"
 
 defaultModuleBaseName :: Text
-defaultModuleBaseName = "Definition."
+defaultModuleBaseName = "Definition"
+
+dot :: Text
+dot = "."
 
 missingConnectionError :: String
 missingConnectionError = "Database connection URL is required"
@@ -40,7 +43,7 @@ typeKeyword :: Text
 typeKeyword = "type "
 
 equals :: Text
-equals = " = "
+equals = " ="
 
 openBracket :: Text
 openBracket = "( "
@@ -50,6 +53,9 @@ doubleColon = " :: "
 
 comma :: Text
 comma = ", "
+
+space :: Text
+space = " "
 
 closeBracket :: Text
 closeBracket = ")"
@@ -88,7 +94,7 @@ booleanType :: Text
 booleanType = "Boolean"
 
 tableType :: Text
-tableType = "Table "
+tableType = "Table"
 
 quote :: Text
 quote = "\""
@@ -97,7 +103,7 @@ dash :: Text
 dash = "_"
 
 proxyType :: Text
-proxyType = "Proxy "
+proxyType = "Proxy"
 
 pureScriptExtension :: String
 pureScriptExtension = ".purs"
