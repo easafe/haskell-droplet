@@ -31,7 +31,7 @@ jobs:
       matrix:
         ghc: ['8.10']
         cabal: [latest]
-        os: [ubuntu-latest, macOS-latest] #, windows-latest]
+        os: [ubuntu-latest] # , macOS-latest, windows-latest]
     name: CI ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
