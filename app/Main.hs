@@ -56,7 +56,7 @@ optionsParser =
             ( OA.strOption $
                 OA.long "definitions-folder"
                     <> OA.short 'f'
-                    <> OA.help "Folder to export typed definitions"
+                    <> OA.help "Folder to export type definitions"
                     <> OA.metavar "STRING"
             )
         <*> OA.optional

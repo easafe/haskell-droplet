@@ -1,3 +1,31 @@
 # haskell-pebble
 
 Run purescript-droplet migrations
+
+## Usage
+
+```
+pebble COMMAND
+
+Available commands:
+  define                   Export type definitions for table(s)
+```
+
+`define` exports type definitions for table(s)
+
+```
+pebble define [INPUT] [-s|--schema STRING]
+                      [-c|--connection-url STRING]
+                      [-f|--definitions-folder STRING]
+                      [-m|--module-base-name STRING]
+
+Available options:
+  -s,--schema STRING       Database schema
+  -c,--connection-url STRING
+                           Database connection URL
+  -f,--definitions-folder STRING
+                           Folder to export type definitions
+  -m,--module-base-name STRING
+                           Output module base name
+  -h,--help                Show this help text
+```
