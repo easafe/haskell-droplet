@@ -32,6 +32,6 @@ fetchColumnDefinitions connectionUrl (DM.fromMaybe defaultSchema -> schema) tabl
     connection <- DPS.connectPostgreSQL . DTE.encodeUtf8 $ DT.pack connectionUrl
     case table of
         Nothing ->
-            DPS.query connection "SELECT table_name, column_name, data_type, cast(is_nullable as bool), cast(is_identity as bool), column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = ?" $ Only schema
+            DPS.query connection "SELECT table_name, column_name, data_type, cast(is_nullable as bool), cast(is_identity as bool), column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = ? ORDER BY table_name, column_name" $ Only schema
         Just tableName -> do
-            DPS.query connection "SELECT table_name, column_name, data_type, cast(is_nullable as bool), cast(is_identity as bool), column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = ? AND table_name = ?" (schema, tableName)
+            DPS.query connection "SELECT table_name, column_name, data_type, cast(is_nullable as bool), cast(is_identity as bool), column_default FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = ? AND table_name = ? ORDER BY column_name" (schema, tableName)

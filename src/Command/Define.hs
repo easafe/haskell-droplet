@@ -133,9 +133,9 @@ makeTables columns = map toTable grouped
 
         toColumnType ColumnDefinition{data_type, is_nullable, is_identity, column_default} =
             let wrapper
+                    | DM.isJust column_default = Default
                     | is_nullable = Nullable
                     | is_identity = Auto
-                    | DM.isJust column_default = Default
                     | otherwise = None
                 typed
                     | data_type == "text" || DL.isPrefixOf "char" data_type = String
@@ -170,7 +170,7 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
                     <> newLine
 
         table =
-            camelCaseName <> doubleColon <> quote <> originalName <> quote <> newLine
+            camelCaseName <> doubleColon <> tableType <> space <> quote <> originalName <> quote <>  space <> titleName <> newLine
                 <> camelCaseName
                 <> equals
                 <> space
