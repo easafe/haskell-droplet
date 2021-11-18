@@ -1,4 +1,4 @@
-# haskell-pebble
+# haskell-pebble [![CI](https://github.com/easafe/haskell-breeze/actions/workflows/CI.yml/badge.svg)](https://github.com/easafe/haskell-breeze/actions/workflows/CI.yml)
 
 Run purescript-droplet migrations
 
