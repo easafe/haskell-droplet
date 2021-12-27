@@ -1,8 +1,12 @@
 # haskell-pebble [![CI](https://github.com/easafe/haskell-pebble/actions/workflows/CI.yml/badge.svg)](https://github.com/easafe/haskell-pebble/actions/workflows/CI.yml)
 
-Run purescript-droplet migrations
+Run [purescript-droplet](https://github.com/easafe/purescript-droplet) migrations
 
-## Usage
+## Documentation
+
+See the [migrations page](https://droplet.asafe.dev/migrations) for purescript-droplet
+
+## Quick start
 
 ```
 pebble COMMAND

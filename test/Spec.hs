@@ -38,12 +38,27 @@ checkFiles = DF.traverse_ $ \name -> do
 main :: IO ()
 main = hspec $ do
     describe "define" $ do
-        it "parses table" $ do
+        it "parses table a" $ do
             C.define defaultOptions{input = Just "table_a"}
             checkFiles ["TableA"]
             SD.removeDirectoryRecursive outputtedFolder
 
+        it "parses table b" $ do
+            C.define defaultOptions{input = Just "t_able_b"}
+            checkFiles ["TAbleB"]
+            SD.removeDirectoryRecursive outputtedFolder
+
+        it "parses table c" $ do
+            C.define defaultOptions{input = Just "tablec"}
+            checkFiles ["Tablec"]
+            SD.removeDirectoryRecursive outputtedFolder
+
+        it "parses table d" $ do
+            C.define defaultOptions{input = Just "TableD"}
+            checkFiles ["TableD"]
+            SD.removeDirectoryRecursive outputtedFolder
+
         it "parses all tables" $ do
             C.define defaultOptions
-            checkFiles ["TableA"] --"TAbleB", "Tablec"]
+            checkFiles ["TableA", "TAbleB", "Tablec", "TableD"]
             SD.removeDirectoryRecursive outputtedFolder

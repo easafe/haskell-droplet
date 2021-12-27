@@ -7,7 +7,8 @@ import Type.Proxy (Proxy(..))
 import Data.DateTime (DateTime)
 
 type Tablec =
-    ( id :: Auto Int
+    ( id :: Column Int (Identity /\ Constraint (Composite "pk_column") PrimaryKey)
+    , id2 :: Column Int (Constraint (Composite "pk_column") PrimaryKey)
     , tableccolumn1 :: Number
     , tableccolumn2 :: DateTime
     )

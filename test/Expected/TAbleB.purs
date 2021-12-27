@@ -9,8 +9,8 @@ import Data.DateTime (DateTime)
 type TAbleB =
     ( column1 :: Maybe Int
     , column2 :: Boolean
-    , column3 :: Default DateTime
-    , id :: Auto Int
+    , column3 :: Column DateTime (Constraint "unique_column" Unique /\ Constraint "default_column" Default)
+    , id :: Column Int (PrimaryKey /\ Identity)
     )
 
 tAbleB :: Table "t_able_b" TAbleB
