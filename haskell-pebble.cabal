@@ -34,6 +34,7 @@ library
       Paths_haskell_pebble
   hs-source-dirs:
       src
+  ghc-options: -Werror=incomplete-patterns
   build-depends:
       base >=4.7 && <5
     , casing

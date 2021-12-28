@@ -2,7 +2,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-
 import Command (Options(..))
 import qualified Command as C
 import Test.Hspec

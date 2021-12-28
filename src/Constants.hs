@@ -1,15 +1,12 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Constants where
-import Data.Text (Text)
 
 defaultDefinitionsFolder :: FilePath
 defaultDefinitionsFolder = "Definition"
 
-defaultModuleBaseName :: Text
+defaultModuleBaseName :: String
 defaultModuleBaseName = "Definition"
 
-dot :: Text
+dot :: String
 dot = "."
 
 missingConnectionError :: String
@@ -18,91 +15,91 @@ missingConnectionError = "Database connection URL is required"
 defaultSchema :: String
 defaultSchema = "public"
 
-moduleKeyword :: Text
+moduleKeyword :: String
 moduleKeyword = "module "
 
-whereKeyword :: Text
+whereKeyword :: String
 whereKeyword = " where\n\n"
 
-defaultImportList :: Text
+defaultImportList :: String
 defaultImportList = "import Droplet.Language\nimport Type.Proxy (Proxy(..))\n"
 
-dateImport :: Text
+dateImport :: String
 dateImport = "import Data.Date (Date)\n"
 
-dateTimeImport :: Text
+dateTimeImport :: String
 dateTimeImport = "import Data.DateTime (DateTime)\n"
 
-newLine :: Text
+newLine :: String
 newLine = "\n"
 
-disclaimer :: Text
+disclaimer :: String
 disclaimer = "-- AUTO GENERATED CODE\n\n"
 
-typeKeyword :: Text
+typeKeyword :: String
 typeKeyword = "type "
 
-equals :: Text
+equals :: String
 equals = " ="
 
-openBracket :: Text
+openBracket :: String
 openBracket = "( "
 
-doubleColon :: Text
+doubleColon :: String
 doubleColon = " :: "
 
-comma :: Text
+comma :: String
 comma = ", "
 
-space :: Text
+space :: String
 space = " "
 
-closeBracket :: Text
+closeBracket :: String
 closeBracket = ")"
 
-ident :: Text
+ident :: String
 ident = "    "
 
-autoType :: Text
-autoType = "Auto "
+identityType :: String
+identityType = "Identity "
 
-nullableType :: Text
+nullableType :: String
 nullableType = "Maybe "
 
-defaultType :: Text
+defaultType :: String
 defaultType = "Default "
 
-questionMark :: Text
+questionMark :: String
 questionMark = "?"
 
-stringType :: Text
+stringType :: String
 stringType = "String"
 
-intType :: Text
+intType :: String
 intType = "Int"
 
-numberType :: Text
+numberType :: String
 numberType = "Number"
 
-dateType :: Text
+dateType :: String
 dateType = "Date"
 
-dateTimeType :: Text
+dateTimeType :: String
 dateTimeType = "DateTime"
 
-booleanType :: Text
+booleanType :: String
 booleanType = "Boolean"
 
-tableType :: Text
+tableType :: String
 tableType = "Table"
 
-quote :: Text
+quote :: String
 quote = "\""
 
-dash :: Text
+dash :: String
 dash = "_"
 
-proxyType :: Text
+proxyType :: String
 proxyType = "Proxy"
 
 pureScriptExtension :: String

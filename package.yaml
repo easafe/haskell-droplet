@@ -32,6 +32,8 @@ dependencies:
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Werror=incomplete-patterns
 
 executables:
   haskell-pebble-exe:
