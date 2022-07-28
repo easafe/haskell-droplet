@@ -11,8 +11,8 @@ type TableA =
     ( aColumn1 :: String
     , aColumn2 :: Maybe String
     , aColumn3 :: Maybe DateTime
-    , aColumn4 :: Default Date
-    , id :: Auto Int
+    , aColumn4 :: Column DateTime (Unique /\ Default)
+    , id :: Column Int (Identity /\ PrimaryKey)
     )
 
 tableA :: Table "table_a" TableA

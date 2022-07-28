@@ -8,7 +8,7 @@ import Command.Internal.Query (ColumnDefinition (..))
 import qualified Command.Internal.Query as CIQ
 import Command.Types (FileOutput (..), Options (..))
 import Constants (
-    autoType,
+    identityType,
     booleanType,
     closeBracket,
     comma,
@@ -38,7 +38,8 @@ import Constants (
     tableType,
     dot,
     typeKeyword,
-    whereKeyword, space
+    whereKeyword,
+    space
  )
 import qualified Data.Foldable as DF
 import Data.HashMap.Strict ((!))
@@ -46,47 +47,45 @@ import qualified Data.HashMap.Strict as DHS
 import Data.Hashable (Hashable)
 import qualified Data.List as DL
 import qualified Data.Maybe as DM
-import Data.Text (Text, empty)
-import qualified Data.Text as DS
-import qualified Data.Text as DT
-import qualified Data.Text.Encoding as DTE
-import qualified Data.Text.IO as DTI
 import qualified Database.PostgreSQL.Simple as DPS
 import GHC.Generics (Generic)
 import qualified System.Directory as SD
 import qualified Text.Casing as TC
 import Prelude hiding (print)
-import Debug.Trace (traceShow)
 
 -- | A table marks the definition and the column row type
 data Table = Table
-    { originalName :: Text
-    , camelCaseName :: Text
+    { originalName :: String
+    , camelCaseName :: String
     , columns :: [Column]
     }
     deriving (Show, Eq)
 
 -- | Row Type information
 data Column = Column
-    { originalName :: Text
-    , camelCaseName :: Text
+    { originalName :: String
+    , camelCaseName :: String
     , dataType :: ColumnType
     }
     deriving (Show, Eq)
 
 data ColumnType = ColumnType
-    { wrapper :: Wrapper
+    { constraint :: [Constraint]
     , typed :: Typed
     }
     deriving (Show, Eq)
 
-data Wrapper
-    = Auto
-    | -- | `Maybe` in the output
-      Nullable
+data Constraint = Constraint {
+    name :: Maybe String,
+    typed :: ConstraintType
+}deriving (Show, Eq)
+
+data ConstraintType
+    = Identity
+    |      Nullable  -- | `Maybe` in the output
     | Default
-    | -- | No wrapper for this type
-      None
+    |     Unique
+    |      None --  | No constraint for this type
     deriving (Show, Eq)
 
 data Typed
@@ -96,46 +95,46 @@ data Typed
     | Date
     | DateTime
     | Boolean
-    | -- | Outputted as a typed hole
-      Unknown
+    |       Unknown -- | Outputted as a typed hole
     deriving (Show, Eq, Generic)
 
 instance Hashable Typed
 
+-- | Outputs types for table(s)
 define :: Options -> IO ()
 define Options{connectionUrl, input, schema, moduleBaseName, definitionsFolder} = do
     columns <- CIQ.fetchColumnDefinitions (DM.fromJust connectionUrl) schema input
-    let m = DM.fromJust moduleBaseName
-        d = DM.fromJust definitionsFolder
-    SD.createDirectoryIfMissing True d
-    DF.traverse_ (saveFile d . print m) $ makeTables columns
-    putStrLn $ "Outputted files to " <> d
+    let moduleName = DM.fromJust moduleBaseName
+        folderName = DM.fromJust definitionsFolder
+    SD.createDirectoryIfMissing True folderName
+    DF.traverse_ (saveFile folderName . print moduleName) $ makeTables columns
+    putStrLn $ "Outputted files to " <> folderName
 
 makeTables :: [ColumnDefinition] -> [Table]
 makeTables columns = map toTable grouped
     where
-        grouped = DL.groupBy (\c d -> table_name c == table_name d) columns
+        grouped = DL.groupBy (\a b -> table_name a == table_name b) columns
 
         toTable definitions =
             let original = table_name $ head definitions
              in Table
                     { originalName = original
-                    , camelCaseName = toCamelCase original
+                    , camelCaseName = TC.camel original
                     , columns = map toColumn definitions
                     }
 
         toColumn def@ColumnDefinition{column_name} =
             Column
                 { originalName = column_name
-                , camelCaseName = toCamelCase column_name
+                , camelCaseName = TC.camel column_name
                 , dataType = toColumnType def
                 }
 
         toColumnType ColumnDefinition{data_type, is_nullable, is_identity, column_default} =
-            let wrapper
+            let constraint
                     | DM.isJust column_default = Default
                     | is_nullable = Nullable
-                    | is_identity = Auto
+                    | is_identity = Identity
                     | otherwise = None
                 typed
                     | data_type == "text" || DL.isPrefixOf "char" data_type = String
@@ -145,15 +144,13 @@ makeTables columns = map toTable grouped
                     | DL.isPrefixOf "timestamp" data_type = DateTime
                     | data_type == "boolean" = Boolean
                     | otherwise = Unknown
-             in ColumnType{wrapper = wrapper, typed = typed}
+             in ColumnType{constraint = constraint, typed = typed}
 
-        toCamelCase = DT.pack . TC.camel . DT.unpack
-
-print :: Text -> Table -> FileOutput
+print :: String -> Table -> FileOutput
 print moduleBaseName Table{originalName, camelCaseName, columns} =
     FileOutput
-        { name = DT.unpack titleName <> pureScriptExtension
-        , contents = DT.intercalate newLine [header, rowType, table, proxies]
+        { name = titleName <> pureScriptExtension
+        , contents = DL.intercalate newLine [header, rowType, table, proxies]
         }
     where
         header = disclaimer <> moduleKeyword <> moduleBaseName <> dot <> titleName <> whereKeyword <> defaultImportList <> extraImports
@@ -163,7 +160,7 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
              in typeKeyword <> titleName <> equals <> newLine
                     <> ident
                     <> openBracket
-                    <> DS.intercalate fieldSeparator (map toField columns)
+                    <> DL.intercalate fieldSeparator (map toField columns)
                     <> newLine
                     <> ident
                     <> closeBracket
@@ -177,7 +174,7 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
                 <> tableType
                 <> newLine
 
-        proxies = DT.intercalate newLine $ map toProxy columns
+        proxies = DL.intercalate newLine $ map toProxy columns
 
         extraImports =
             let dataTypes = map (typed . dataType) columns
@@ -187,13 +184,13 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
                     | otherwise = running
              in DL.foldl include empty [Date, DateTime]
 
-        toField Column{originalName, camelCaseName, dataType = ColumnType{wrapper, typed}} =
+        toField Column{originalName, camelCaseName, dataType = ColumnType{constraint, typed}} =
             let w =
-                    case wrapper of
-                        Auto -> autoType
+                    case constraint of
+                        Identity -> identityType
                         Nullable -> nullableType
                         Default -> defaultType
-                        None -> empty
+                        None -> ""
                 t = case typed of
                     String -> stringType
                     Int -> intType
@@ -213,9 +210,9 @@ print moduleBaseName Table{originalName, camelCaseName, columns} =
                     <> proxyType
                     <> newLine
 
-        titleName = DT.pack . TC.pascal $ DT.unpack camelCaseName
+        titleName = TC.pascal camelCaseName
 
 saveFile :: FilePath -> FileOutput -> IO ()
 saveFile folderName FileOutput{name, contents} = do
     let fileName = folderName <> slash <> name
-    DTI.writeFile fileName contents
+    writeFile fileName contents

@@ -3,7 +3,6 @@
 
 module Command.Types where
 
-import Data.Text (Text)
 import GHC.Generics (Generic)
 import Data.Hashable (Hashable)
 import Database.PostgreSQL.Simple (FromRow)
@@ -16,11 +15,11 @@ data Options = Options
     , connectionUrl :: Maybe String
     , -- | Where to output the generated code
       definitionsFolder :: Maybe String
-    , moduleBaseName :: Maybe Text
+    , moduleBaseName :: Maybe String
     }
     deriving (Show)
 
 data FileOutput = FileOutput
     { name :: String
-    , contents :: Text
+    , contents :: String
     }
